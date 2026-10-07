@@ -27,6 +27,6 @@ npm install # ou pip install -r requirements.txt
 * [x] Responde perguntas frequentes sobre TI.
 * [ ] Integração com banco de dados (Em desenvolvimento).
 
-## 👤 Autor
+## 👤 Autors
 
 * **Lucas Roberto da Rosa** - [Seu GitHub](https://github.com)
