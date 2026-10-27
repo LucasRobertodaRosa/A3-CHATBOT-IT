@@ -4,72 +4,84 @@
     "id": 1,
     "intencao": "configuracao",
     "pergunta": "Como configurar o endereço IP de uma câmera Hikvision?",
-    "resposta": "Verifique o endereço IP atual da câmera e a faixa de rede utilizada. Utilize uma ferramenta oficial da Hikvision ou a interface de gerenciamento compatível com o modelo para consultar e configurar os parâmetros de rede. Confirme que o endereço escolhido não está em uso e consulte o manual do equipamento."
+    "resposta": "Verifique o endereço IP atual da câmera e a faixa de rede utilizada. Utilize uma ferramenta oficial da Hikvision ou a interface de gerenciamento compatível com o modelo para consultar e configurar os parâmetros de rede. Confirme que o endereço escolhido não está em uso e consulte o manual do equipamento.",
+    "referencia": "Manual do usuário do modelo da câmera: configurações de rede TCP/IP"
   },
   {
     "id": 2,
     "intencao": "configuracao",
     "pergunta": "Como adicionar uma câmera Hikvision ao gravador NVR?",
-    "resposta": "Acesse a interface de gerenciamento do NVR, localize a seção de gerenciamento de câmeras e siga o procedimento de adição indicado para o modelo. Verifique a conectividade de rede, a compatibilidade do equipamento e as credenciais autorizadas."
+    "resposta": "Acesse a interface de gerenciamento do NVR, localize a seção de gerenciamento de câmeras e siga o procedimento de adição indicado para o modelo. Verifique a conectividade de rede, a compatibilidade do equipamento e as credenciais autorizadas.",
+    "referencia": "Manual do usuário do modelo de NVR: gerenciamento e adição de câmeras"
   },
   {
     "id": 3,
     "intencao": "configuracao",
     "pergunta": "Como acessar uma câmera Hikvision pela rede?",
-    "resposta": "Identifique o endereço IP da câmera e confirme que seu computador está conectado a uma rede que permite alcançá-la. Utilize um navegador ou cliente compatível com o modelo e informe as credenciais autorizadas. Consulte o manual se a interface ou o método de acesso for diferente."
+    "resposta": "Identifique o endereço IP da câmera e confirme que seu computador está conectado a uma rede que permite alcançá-la. Utilize um navegador ou cliente compatível com o modelo e informe as credenciais autorizadas. Consulte o manual se a interface ou o método de acesso for diferente.",
+    "referencia": "Manual do usuário do modelo da câmera: acesso à interface web e configurações de rede"
   },
   {
     "id": 4,
     "intencao": "configuracao",
     "pergunta": "Como configurar a gravação de vídeo no NVR?",
-    "resposta": "Na interface do NVR, verifique se o armazenamento está reconhecido e configure o agendamento de gravação conforme a necessidade. Consulte o manual do modelo para ajustar gravação contínua, por eventos ou outros modos disponíveis."
+    "resposta": "Na interface do NVR, verifique se o armazenamento está reconhecido e configure o agendamento de gravação conforme a necessidade. Consulte o manual do modelo para ajustar gravação contínua, por eventos ou outros modos disponíveis.",
+    "referencia": "Manual do usuário do modelo de NVR: armazenamento e programação de gravação"
   },
   {
     "id": 5,
     "intencao": "erros",
     "pergunta": "Minha câmera Hikvision está offline. O que fazer?",
-    "resposta": "Verifique a alimentação elétrica, os cabos e as conexões de rede. Confirme se a câmera está acessível na rede e se as configurações de IP são compatíveis. Se estiver conectada a um NVR, verifique também o estado do canal e as credenciais cadastradas."
+    "resposta": "Verifique a alimentação elétrica, os cabos e as conexões de rede. Confirme se a câmera está acessível na rede e se as configurações de IP são compatíveis. Se estiver conectada a um NVR, verifique também o estado do canal e as credenciais cadastradas.",
+    "referencia": "Manuais dos modelos de câmera e NVR: solução de problemas de conectividade"
   },
   {
     "id": 6,
     "intencao": "erros",
     "pergunta": "Por que não consigo visualizar as imagens da câmera?",
-    "resposta": "Confirme se a câmera está ligada e acessível, se o usuário possui permissão de visualização e se o equipamento está funcionando normalmente. Verifique também a conexão de rede, o estado do canal no gravador e possíveis mensagens de erro."
+    "resposta": "Confirme se a câmera está ligada e acessível, se o usuário possui permissão de visualização e se o equipamento está funcionando normalmente. Verifique também a conexão de rede, o estado do canal no gravador e possíveis mensagens de erro.",
+    "referencia": "Manuais dos modelos de câmera e NVR: visualização ao vivo e solução de problemas"
   },
   {
     "id": 7,
     "intencao": "erros",
     "pergunta": "O NVR não está gravando. Como resolver?",
-    "resposta": "Verifique se o dispositivo de armazenamento é reconhecido e apresenta estado normal. Confira o agendamento de gravação, a data e a hora do equipamento e o estado das câmeras. Consulte o manual do NVR para identificar alertas de armazenamento ou gravação."
+    "resposta": "Verifique se o dispositivo de armazenamento é reconhecido e apresenta estado normal. Confira o agendamento de gravação, a data e a hora do equipamento e o estado das câmeras. Consulte o manual do NVR para identificar alertas de armazenamento ou gravação.",
+    "referencia": "Manual do usuário do modelo de NVR: armazenamento, alarmes e programação de gravação"
   },
   {
     "id": 8,
     "intencao": "erros",
     "pergunta": "A imagem da câmera está travando. O que devo verificar?",
-    "resposta": "Verifique a estabilidade da rede, a qualidade das conexões e a disponibilidade de largura de banda. Compare a visualização local com o acesso remoto, se disponível, para ajudar a identificar a origem do problema. Consulte as configurações de transmissão e o manual do modelo."
+    "resposta": "Verifique a estabilidade da rede, a qualidade das conexões e a disponibilidade de largura de banda. Compare a visualização local com o acesso remoto, se disponível, para ajudar a identificar a origem do problema. Consulte as configurações de transmissão e o manual do modelo.",
+    "referencia": "Manual do usuário do modelo da câmera: parâmetros de vídeo e transmissão de rede"
   },
   {
     "id": 9,
     "intencao": "senhas",
     "pergunta": "Esqueci a senha da minha câmera Hikvision. Como recuperar o acesso?",
-    "resposta": "Utilize o procedimento oficial de recuperação de senha indicado para o modelo e a região do equipamento. Poderá ser necessário comprovar autorização para administrar o dispositivo. Não compartilhe senhas, códigos de verificação ou arquivos de recuperação com pessoas não autorizadas."
+    "resposta": "Utilize o procedimento oficial de recuperação de senha indicado para o modelo e a região do equipamento. Poderá ser necessário comprovar autorização para administrar o dispositivo. Não compartilhe senhas, códigos de verificação ou arquivos de recuperação com pessoas não autorizadas.",
+    "referencia": "Documentação de suporte Hikvision aplicável ao modelo: recuperação oficial de senha"
   },
   {
     "id": 10,
     "intencao": "senhas",
     "pergunta": "Como alterar a senha de administrador da câmera?",
-    "resposta": "Acesse o gerenciamento do dispositivo com uma conta autorizada e procure as opções de usuários ou segurança. Defina uma senha forte, exclusiva e armazenada com segurança. Os nomes dos menus podem variar conforme o modelo e a versão do firmware."
+    "resposta": "Acesse o gerenciamento do dispositivo com uma conta autorizada e procure as opções de usuários ou segurança. Defina uma senha forte, exclusiva e armazenada com segurança. Os nomes dos menus podem variar conforme o modelo e a versão do firmware.",
+    "referencia": "Manual do usuário do modelo da câmera: gerenciamento de usuários e alteração de senha"
   },
   {
     "id": 11,
     "intencao": "senhas",
     "pergunta": "Como proteger o acesso remoto às câmeras Hikvision?",
-    "resposta": "Use senhas fortes e exclusivas, mantenha o firmware atualizado conforme as orientações oficiais e limite o acesso às pessoas autorizadas. Evite expor diretamente os dispositivos à internet sem necessidade e utilize os mecanismos de acesso remoto recomendados para o modelo."
+    "resposta": "Use senhas fortes e exclusivas, mantenha o firmware atualizado conforme as orientações oficiais e limite o acesso às pessoas autorizadas. Evite expor diretamente os dispositivos à internet sem necessidade e utilize os mecanismos de acesso remoto recomendados para o modelo.",
+    "referencia": "Manuais e orientações de segurança Hikvision para os modelos utilizados: acesso remoto e segurança"
   },
   {
     "id": 12,
     "intencao": "senhas",
     "pergunta": "Como criar um usuário com acesso limitado à câmera?",
-    "resposta": "Entre na interface de gerenciamento com uma conta administrativa autorizada e consulte as opções de usuários e permissões. Crie uma conta individual e conceda apenas os privilégios necessários para sua função. A disponibilidade das permissões depende do modelo e do firmware."
+    "resposta": "Entre na interface de gerenciamento com uma conta administrativa autorizada e consulte as opções de usuários e permissões. Crie uma conta individual e conceda apenas os privilégios necessários para sua função. A disponibilidade das permissões depende do modelo e do firmware.",
+    "referencia": "Manual do usuário do modelo da câmera: usuários, perfis e permissões"
   }
 ]
