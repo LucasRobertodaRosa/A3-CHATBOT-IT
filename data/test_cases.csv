@@ -19,3 +19,13 @@ id,pergunta,categoria,tipo,resposta_esperada,resposta_obtida
 18,,,,,
 19,,,,,
 20,,,,,
+O documento prevê exatamente 20 testes, sendo:
+- 10 perguntas diretas;
+- 4 reformulações semânticas;
+- 3 perguntas ambíguas;
+- 3 perguntas fora do escopo. A3 IA(1)
+Na coluna tipo, portanto, podemos usar:
+direta
+reformulacao
+ambigua
+fora_escopo
