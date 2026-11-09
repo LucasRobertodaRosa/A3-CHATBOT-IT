@@ -2,3 +2,37 @@
 __pycache__/
 *.pyc
 /A3-CHATBOT-IT/
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Cache e arquivos compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de configuração e segredos locais
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editores e IDEs
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
