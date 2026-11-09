@@ -1,4 +1,16 @@
 
+"""
+Leitura e validação da base de conhecimento do A3 Chatbot IT.
+
+Contrato para outras partes do projeto:
+    from validar_base import carregar_base
+    registros = carregar_base()
+
+Cada registro contém:
+    id (int), intencao (str), pergunta (str),
+    resposta (str), referencia (str).
+"""
+
 import json
 import re
 import unicodedata
@@ -29,13 +41,10 @@ CAMPOS_OBRIGATORIOS = {
 def normalizar_pergunta(texto):
     """
     Normaliza perguntas para detectar duplicidades,
-    mesmo com diferenças de acentos ou pontuação.
+    ignorando diferenças de acentos, pontuação e espaços.
     """
 
-    texto = unicodedata.normalize(
-        "NFKD",
-        texto.lower().strip()
-    )
+    texto = unicodedata.normalize("NFKD", texto.casefold())
 
     texto = "".join(
         caractere
@@ -43,138 +52,68 @@ def normalizar_pergunta(texto):
         if not unicodedata.combining(caractere)
     )
 
-    texto = re.sub(
-        r"[^a-z0-9]+",
-        " ",
-        texto
-    )
+    texto = re.sub(r"[^a-z0-9]+", " ", texto)
 
-    texto = re.sub(r"\s+", " ", texto)
-
-    return texto.strip()
+    return " ".join(texto.split())
 
 
-def validar_base(caminho=CAMINHO_BASE):
+def validar_registros(dados):
     """
-    Verifica a integridade da base de conhecimento.
+    Valida os registros da base de conhecimento.
 
-    Valida:
-    - Existência do arquivo
-    - Formato JSON
-    - Estrutura em lista
-    - Campos obrigatórios
-    - IDs únicos e válidos
-    - Intenções permitidas
-    - Textos não vazios
-    - Perguntas duplicadas
-
-    Retorna True quando válida e False caso contrário.
+    Retorna uma lista de erros.
+    Uma lista vazia significa que a base é válida.
     """
-
-    caminho = Path(caminho)
-
-    # 1. Verificar existência do arquivo
-
-    if not caminho.is_file():
-        print(
-            f"ERRO: arquivo não encontrado: {caminho}"
-        )
-        return False
-
-    # 2. Carregar e validar o formato JSON
-
-    try:
-        with caminho.open(
-            "r",
-            encoding="utf-8"
-        ) as arquivo:
-            dados = json.load(arquivo)
-
-    except (json.JSONDecodeError, UnicodeDecodeError) as erro:
-        print(
-            f"ERRO: JSON inválido ou codificação incorreta: {erro}"
-        )
-        return False
-
-    except OSError as erro:
-        print(
-            f"ERRO: não foi possível ler a base: {erro}"
-        )
-        return False
-
-    # 3. Validar a estrutura principal
 
     if not isinstance(dados, list):
-        print(
-            "ERRO: a raiz do JSON deve ser uma lista."
-        )
-        return False
+        return ["A raiz do JSON deve ser uma lista."]
 
     if not dados:
-        print(
-            "ERRO: a base de conhecimento está vazia."
-        )
-        return False
+        return ["A base de conhecimento está vazia."]
 
-    # 4. Preparar estruturas de validação
-
+    erros = []
     ids_vistos = set()
     perguntas_vistas = {}
-    erros = []
 
-    # 5. Percorrer cada registro
-
-    for posicao, item in enumerate(
-        dados,
-        start=1
-    ):
+    for posicao, item in enumerate(dados, start=1):
+        prefixo = f"Registro {posicao}"
 
         if not isinstance(item, dict):
             erros.append(
-                f"Registro {posicao}: deve ser um objeto JSON."
+                f"{prefixo}: deve ser um objeto JSON."
             )
             continue
 
-        # 6. Verificar campos obrigatórios
-
+        # Verificar campos obrigatórios
         faltantes = CAMPOS_OBRIGATORIOS - item.keys()
 
         if faltantes:
             erros.append(
-                f"Registro {posicao}: faltam os campos "
+                f"{prefixo}: faltam campos: "
                 f"{', '.join(sorted(faltantes))}."
             )
 
-        # 7. Verificar o ID
-
+        # Verificar ID
         identificador = item.get("id")
 
         if (
             isinstance(identificador, bool)
             or not isinstance(identificador, int)
+            or identificador <= 0
         ):
             erros.append(
-                f"Registro {posicao}: "
-                "'id' deve ser um número inteiro."
-            )
-
-        elif identificador <= 0:
-            erros.append(
-                f"Registro {posicao}: "
-                "'id' deve ser maior que zero."
+                f"{prefixo}: 'id' deve ser um inteiro positivo."
             )
 
         elif identificador in ids_vistos:
             erros.append(
-                f"Registro {posicao}: "
-                f"id duplicado {identificador}."
+                f"{prefixo}: ID duplicado: {identificador}."
             )
 
         else:
             ids_vistos.add(identificador)
 
-        # 8. Verificar a intenção
-
+        # Verificar intenção
         intencao = item.get("intencao")
 
         if (
@@ -182,84 +121,100 @@ def validar_base(caminho=CAMINHO_BASE):
             or intencao not in INTENCOES_VALIDAS
         ):
             erros.append(
-                f"Registro {posicao}: "
-                f"intenção inválida: {intencao!r}."
+                f"{prefixo}: intenção inválida: {intencao!r}."
             )
 
-        # 9. Verificar textos obrigatórios
-
-        for campo in (
-            "pergunta",
-            "resposta",
-            "referencia"
-        ):
-
+        # Verificar textos obrigatórios
+        for campo in ("pergunta", "resposta", "referencia"):
             valor = item.get(campo)
 
-            if (
-                not isinstance(valor, str)
-                or not valor.strip()
-            ):
+            if not isinstance(valor, str) or not valor.strip():
                 erros.append(
-                    f"Registro {posicao}: "
-                    f"'{campo}' deve ser texto não vazio."
+                    f"{prefixo}: '{campo}' deve ser texto não vazio."
                 )
 
-        # 10. Detectar perguntas duplicadas
-
+        # Detectar perguntas duplicadas
         pergunta = item.get("pergunta")
 
-        if (
-            isinstance(pergunta, str)
-            and pergunta.strip()
-        ):
-
-            normalizada = normalizar_pergunta(
-                pergunta
-            )
+        if isinstance(pergunta, str) and pergunta.strip():
+            normalizada = normalizar_pergunta(pergunta)
 
             if normalizada in perguntas_vistas:
                 anterior = perguntas_vistas[normalizada]
 
                 erros.append(
-                    f"Registro {posicao}: "
-                    f"pergunta duplicada do registro {anterior}."
+                    f"{prefixo}: pergunta duplicada "
+                    f"do registro {anterior}."
                 )
-
             else:
                 perguntas_vistas[normalizada] = posicao
 
-    # 11. Exibir erros encontrados
+    return erros
+
+
+def carregar_base(caminho=None):
+    """
+    Carrega a base de conhecimento e retorna os registros válidos.
+
+    Pode receber um caminho alternativo para facilitar testes.
+    Levanta ValueError quando a base contém erros.
+    """
+
+    arquivo = Path(caminho) if caminho is not None else CAMINHO_BASE
+
+    try:
+        with arquivo.open("r", encoding="utf-8-sig") as origem:
+            dados = json.load(origem)
+
+    except (OSError, UnicodeError, json.JSONDecodeError) as erro:
+        raise ValueError(
+            f"Não foi possível carregar a base de conhecimento: {erro}"
+        ) from erro
+
+    erros = validar_registros(dados)
 
     if erros:
-        print("Foram encontrados problemas na base:")
+        detalhes = "\n".join(f"- {erro}" for erro in erros)
 
-        for erro in erros:
-            print(f"- {erro}")
+        raise ValueError(
+            f"Base de conhecimento inválida:\n{detalhes}"
+        )
 
+    return dados
+
+
+def validar_base(caminho=None):
+    """
+    Mantém a função de validação original.
+
+    Imprime o diagnóstico e retorna True ou False.
+    """
+
+    try:
+        dados = carregar_base(caminho)
+
+    except (OSError, UnicodeError, ValueError) as erro:
+        print(f"ERRO: {erro}")
         return False
-
-    # 12. Exibir resultado da validação
 
     print(
         f"Base válida! Total de registros: {len(dados)}"
     )
 
     for intencao in sorted(INTENCOES_VALIDAS):
-
         quantidade = sum(
             item["intencao"] == intencao
             for item in dados
         )
 
         print(
-            f"- {intencao}: {quantidade} registros"
+            f"- {intencao}: {quantidade} "
+            f"{'registro' if quantidade == 1 else 'registros'}"
         )
 
     return True
 
 
 if __name__ == "__main__":
-    raise SystemExit(
-        0 if validar_base() else 1
-    )
+    if not validar_base():
+        raise SystemExit(1)
