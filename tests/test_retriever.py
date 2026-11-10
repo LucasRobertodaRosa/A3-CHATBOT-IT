@@ -41,3 +41,15 @@ def test_sem_correspondencia():
 
     assert resultado is not None
     assert resultado["similaridade"] == 0.0
+
+def test_pergunta_reformulada():
+    retriever = Retriever()
+
+    pergunta_original = retriever.base[0]["pergunta"]
+
+    pergunta_reformulada = pergunta_original.upper()
+
+    resultado = retriever.buscar(pergunta_reformulada)
+
+    assert resultado is not None
+    assert resultado["similaridade"] > 0.99
