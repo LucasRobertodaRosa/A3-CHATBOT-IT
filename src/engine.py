@@ -11,18 +11,33 @@ O resultado é sempre um dicionário com as chaves:
     intencao  (str | None)  "configuracao" | "erros" | "senhas" | None
     confianca (float)       similaridade do melhor resultado (0.0 a 1.0)
     fallback  (bool)        True quando a pergunta deve ir para um humano
-    motivo    (str)         "ok" | "vazia" | "baixa_confianca" (o motivo
-                            de escopo entra em um commit seguinte)
+    motivo    (str)         "ok" | "vazia" | "baixa_confianca" | "fora_escopo"
+
+Controle de escopo: antes de consultar o retriever, a pergunta precisa citar
+ao menos um termo do domínio (câmera, NVR, DVR, Hikvision etc.). Sem isso,
+ela é tratada como fora do escopo, mesmo que a similaridade fosse alta por
+causa de palavras genéricas como "como configurar" ou "recuperar senha".
 
 Regra de confiança: a resposta só é aceita quando a similaridade do melhor
 resultado é maior ou igual ao limiar. O valor inicial é 0.40, conforme a
 especificação, e pode ser trocado por chamada (ex.: pelas métricas).
 
-Abstenção: abaixo do limiar o engine não inventa resposta. Devolve a
-mensagem padrão de encaminhamento ao suporte humano, com fallback=True.
+Abstenção: fora do escopo ou abaixo do limiar, o engine não inventa resposta.
+Devolve a mensagem padrão de encaminhamento ao suporte humano, com
+fallback=True.
 """
 
 LIMIAR_CONFIANCA = 0.40
+
+# Termos do domínio, no mesmo formato que o preprocessar() entrega (minúsculas
+# e sem acento). Siglas curtas exigem palavra inteira, para "ip" não casar
+# com "tipo". Os radicais casam com o início da palavra: "camera" cobre
+# "cameras", "hik" cobre "hikvision" e "hik-connect".
+TERMOS_EXATOS = frozenset({"ip", "nvr", "dvr", "ptz", "sadp"})
+RADICAIS = (
+    "hik", "ivms", "camera", "gravador", "cftv", "vigilancia",
+    "monitoramento", "dispositivo", "equipamento",
+)
 
 MENSAGEM_FALLBACK = (
     "Não encontrei uma resposta confiável para essa pergunta na base de "
@@ -72,6 +87,14 @@ def _confianca_suficiente(confianca, limiar):
     return confianca >= limiar
 
 
+def _dentro_do_escopo(texto):
+    """True se o texto já pré-processado cita algum termo do domínio."""
+    return any(
+        palavra in TERMOS_EXATOS or palavra.startswith(RADICAIS)
+        for palavra in texto.split()
+    )
+
+
 def _fallback(confianca, motivo):
     """Abstenção: não inventa resposta e encaminha ao suporte humano."""
     return _resultado(
@@ -99,6 +122,11 @@ def processar_pergunta(pergunta, limiar=LIMIAR_CONFIANCA):
     if not texto.strip():
         # Ex.: pergunta composta só por símbolos ou emojis.
         return _pergunta_vazia()
+
+    if not _dentro_do_escopo(texto):
+        # Sem termo do domínio: nem consulta a base. Confiança 0.0 porque
+        # a busca não chegou a ser feita.
+        return _fallback(0.0, "fora_escopo")
 
     melhor = _buscar_melhor(texto)
     confianca = float(melhor["similaridade"])
