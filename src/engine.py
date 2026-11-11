@@ -17,9 +17,23 @@ O resultado é sempre um dicionário com as chaves:
 Regra de confiança: a resposta só é aceita quando a similaridade do melhor
 resultado é maior ou igual ao limiar. O valor inicial é 0.40, conforme a
 especificação, e pode ser trocado por chamada (ex.: pelas métricas).
+
+Abstenção: abaixo do limiar o engine não inventa resposta. Devolve a
+mensagem padrão de encaminhamento ao suporte humano, com fallback=True.
 """
 
 LIMIAR_CONFIANCA = 0.40
+
+MENSAGEM_FALLBACK = (
+    "Não encontrei uma resposta confiável para essa pergunta na base de "
+    "conhecimento. Para evitar uma orientação incorreta, recomendo "
+    "encaminhar sua dúvida ao suporte técnico humano."
+)
+
+MENSAGEM_PERGUNTA_VAZIA = (
+    "Digite sua pergunta sobre equipamentos Hikvision "
+    "(configuração, erros ou senhas)."
+)
 
 
 def _preprocessar(texto):
@@ -58,30 +72,39 @@ def _confianca_suficiente(confianca, limiar):
     return confianca >= limiar
 
 
+def _fallback(confianca, motivo):
+    """Abstenção: não inventa resposta e encaminha ao suporte humano."""
+    return _resultado(
+        resposta=MENSAGEM_FALLBACK,
+        confianca=confianca,
+        fallback=True,
+        motivo=motivo,
+    )
+
+
+def _pergunta_vazia():
+    """Pergunta sem conteúdo: pede ao usuário que digite, sem acionar fallback."""
+    return _resultado(resposta=MENSAGEM_PERGUNTA_VAZIA, motivo="vazia")
+
+
 def processar_pergunta(pergunta, limiar=LIMIAR_CONFIANCA):
     """Recebe a pergunta do usuário e devolve o resultado padronizado.
 
     `limiar` é opcional e permite testar outros valores sem alterar o código.
     """
     if not isinstance(pergunta, str) or not pergunta.strip():
-        return _resultado(motivo="vazia")
+        return _pergunta_vazia()
 
     texto = _preprocessar(pergunta)
     if not texto.strip():
         # Ex.: pergunta composta só por símbolos ou emojis.
-        return _resultado(motivo="vazia")
+        return _pergunta_vazia()
 
     melhor = _buscar_melhor(texto)
     confianca = float(melhor["similaridade"])
 
     if not _confianca_suficiente(confianca, limiar):
-        # A mensagem de encaminhamento ao suporte humano entra no
-        # próximo commit; aqui só registramos a decisão e a confiança.
-        return _resultado(
-            confianca=confianca,
-            fallback=True,
-            motivo="baixa_confianca",
-        )
+        return _fallback(confianca, "baixa_confianca")
 
     return _resultado(
         resposta=melhor["resposta"],
