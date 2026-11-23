@@ -39,7 +39,8 @@ def executar_testes():
     resultados = []
 
     with open(CAMINHO_TESTES, encoding="utf-8-sig", newline="") as arquivo:
-        leitor = csv.DictReader(arquivo)
+        linhas = (linha for linha in arquivo if linha.strip())
+        leitor = csv.DictReader(linhas)
 
         for caso in leitor:
             total += 1

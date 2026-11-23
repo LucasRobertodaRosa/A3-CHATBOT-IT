@@ -119,3 +119,6 @@ class Retriever:
 def buscar_resposta(pergunta):
     retriever = Retriever()
     return retriever.buscar(pergunta)
+
+def melhor_resposta(pergunta):
+    return buscar_resposta(pergunta)
