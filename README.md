@@ -105,36 +105,55 @@ A3-CHATBOT-IT/
 
 ### Pré-requisitos
 
-- Python instalado.
+- Python 3.14 ou versão compatível.
 - Git instalado.
 - Visual Studio Code ou outro editor de código.
 
 ### Clonar o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/LucasRobertodaRosa/A3-CHATBOT-IT.git
 cd A3-CHATBOT-IT
 ```
 
 ### Criar o ambiente virtual
 
-```bash
+```powershell
 python -m venv .venv
 ```
 
 ### Ativar o ambiente virtual
 
-Windows PowerShell:
+No Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
+Caso a execução de scripts esteja bloqueada, é possível
+utilizar diretamente o Python do ambiente virtual, sem ativá-lo.
+
 ### Instalar as dependências
 
-```bash
+Com o ambiente virtual ativado:
+
+```powershell
 python -m pip install -r requirements.txt
 ```
+
+Sem ativar o ambiente virtual:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+### Verificar as dependências
+
+```powershell
+.\.venv\Scripts\python.exe -m pip check
+```
+
+A instalação foi validada em ambiente Windows com Python 3.14.10.
 
 ## 8. Validação da base de conhecimento
 
@@ -156,21 +175,81 @@ streamlit run app.py
 
 A interface será disponibilizada localmente pelo Streamlit.
 
+
 ## 10. Avaliação do sistema
 
-O projeto prevê uma avaliação utilizando 20 casos de teste:
+A avaliação do chatbot utiliza 20 casos de teste armazenados
+no arquivo `data/test_cases.csv`.
+
+### Distribuição dos testes
 
 - 10 perguntas diretas.
 - 4 perguntas reformuladas.
 - 3 perguntas ambíguas.
 - 3 perguntas fora do escopo.
 
-As métricas previstas incluem:
+### Executar os testes
 
-- Accuracy (acurácia).
-- Falsos positivos.
-- Falsos negativos.
-- Taxa de abstenção.
+A partir da pasta raiz do projeto, execute:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.metrics
+```
+
+O programa envia cada pergunta ao chatbot e compara a intenção
+ou o comportamento de fallback com o resultado esperado.
+
+### Métricas calculadas
+
+- **Acurácia:** percentual de testes classificados corretamente.
+- **Acertos:** quantidade de resultados iguais aos esperados.
+- **Erros:** quantidade de resultados diferentes dos esperados.
+- **Falsos positivos:** casos em que o chatbot respondeu quando
+  deveria utilizar fallback.
+- **Falsos negativos:** casos em que o chatbot utilizou fallback
+  quando deveria responder.
+- **Abstenções:** quantidade de vezes que o chatbot utilizou fallback.
+- **Taxa de abstenção:** percentual de testes com fallback.
+
+Os falsos positivos e negativos são definidos em relação à
+decisão de responder ou utilizar fallback, não à classificação
+multiclasse das intenções.
+
+### Resultados da avaliação inicial
+
+| Métrica | Resultado |
+|---|---:|
+| Total de testes | 20 |
+| Acertos | 14 |
+| Erros | 6 |
+| Acurácia | 70,00% |
+| Falsos positivos | 3 |
+| Falsos negativos | 1 |
+| Abstenções | 4 |
+| Taxa de abstenção | 20,00% |
+
+### Análise dos resultados
+
+O chatbot apresentou 70% de acurácia na avaliação inicial.
+
+Foram identificados seis casos com resultados diferentes
+dos esperados:
+
+- Testes 7 e 11: classificação de intenção incorreta.
+- Teste 13: fallback utilizado quando era esperada uma resposta.
+- Testes 15, 16 e 17: respostas produzidas para perguntas
+  consideradas ambíguas na massa de testes.
+
+Os resultados demonstram que o mecanismo de recuperação
+consegue identificar diversas perguntas da base de conhecimento,
+mas ainda apresenta limitações na interpretação de perguntas
+reformuladas e ambíguas.
+
+O limiar de confiança utilizado na avaliação foi de 0.40.
+
+Os resultados representam uma avaliação inicial com uma massa
+limitada de 20 casos e não devem ser interpretados como uma
+medida definitiva de desempenho do sistema.
 
 ## 11. Organização e versionamento
 
