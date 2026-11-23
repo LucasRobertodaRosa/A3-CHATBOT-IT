@@ -1,31 +1,22 @@
+
 id,pergunta,categoria,tipo,resposta_esperada,resposta_obtida
-1,,,,,
-2,,,,,
-3,,,,,
-4,,,,,
-5,,,,,
-6,,,,,
-7,,,,,
-8,,,,,
-9,,,,,
-10,,,,,
-11,,,,,
-12,,,,,
-13,,,,,
-14,,,,,
-15,,,,,
-16,,,,,
-17,,,,,
-18,,,,,
-19,,,,,
-20,,,,,
-O documento prevê exatamente 20 testes, sendo:
-- 10 perguntas diretas;
-- 4 reformulações semânticas;
-- 3 perguntas ambíguas;
-- 3 perguntas fora do escopo. A3 IA(1)
-Na coluna tipo, portanto, podemos usar:
-direta
-reformulacao
-ambigua
-fora_escopo
+1,"Como configurar o endereço IP de uma câmera Hikvision?",configuracao,direta,configuracao,
+2,"Como adicionar uma câmera Hikvision ao meu NVR?",configuracao,direta,configuracao,
+3,"Como acessar minha câmera Hikvision pela rede?",configuracao,direta,configuracao,
+4,"Como programar a gravação de vídeos no NVR?",configuracao,direta,configuracao,
+5,"Minha câmera Hikvision está offline. Como resolver?",erros,direta,erros,
+6,"Não consigo visualizar as imagens da minha câmera. O que verificar?",erros,direta,erros,
+7,"Meu NVR parou de gravar. Como solucionar?",erros,direta,erros,
+8,"A imagem da minha câmera Hikvision está travando. O que fazer?",erros,direta,erros,
+9,"Esqueci a senha da câmera Hikvision. Como recuperar?",senhas,direta,senhas,
+10,"Como mudar a senha de administrador da câmera?",senhas,direta,senhas,
+11,"Como faço para mudar o IP da minha câmera Hikvision?",configuracao,reformulacao,configuracao,
+12,"Como faço para colocar uma câmera no gravador NVR?",configuracao,reformulacao,configuracao,
+13,"Minha câmera não aparece online. Como posso verificar?",erros,reformulacao,erros,
+14,"Perdi minha senha de acesso ao equipamento Hikvision. Como recupero?",senhas,reformulacao,senhas,
+15,"Minha câmera Hikvision está estranha. O que pode ser?",erros,ambigua,fallback:baixa_confianca,
+16,"Estou com um problema no meu NVR. Como resolver?",erros,ambigua,fallback:baixa_confianca,
+17,"Meu equipamento Hikvision não está funcionando direito.",erros,ambigua,fallback:baixa_confianca,
+18,"Como instalar o Windows no meu computador?",fora_escopo,fora_escopo,fallback:fora_escopo,
+19,"Qual é a melhor placa de vídeo para jogos?",fora_escopo,fora_escopo,fallback:fora_escopo,
+20,"Como configurar uma impressora Wi-Fi?",fora_escopo,fora_escopo,fallback:fora_escopo,
