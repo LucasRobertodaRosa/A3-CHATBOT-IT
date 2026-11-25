@@ -1,7 +1,7 @@
 """
 Interface Streamlit do Chatbot de Suporte Técnico Hikvision.
 
-Commit 3 - Histórico de conversa durante a sessão.
+Commit 4 - Exibição do fallback e do nível de confiança.
 """
 
 import streamlit as st
@@ -14,12 +14,46 @@ st.set_page_config(
     layout="centered",
 )
 
+THRESHOLD = 0.40  # mesmo valor padrão do engine
 
-def extrair_resposta(resultado):
-    """Aceita retorno do engine como dict ou como texto simples."""
+MENSAGEM_FALLBACK = (
+    "Não encontrei uma resposta com confiança suficiente para a sua pergunta. "
+    "Vou encaminhar você para o **suporte técnico humano**, que poderá ajudar melhor."
+)
+
+
+def normalizar_resultado(resultado):
+    """
+    Converte o retorno do engine em um dict padrão:
+    {"resposta": str, "confianca": float | None, "categoria": str | None, "fallback": bool}
+    """
     if isinstance(resultado, dict):
-        return resultado.get("resposta", "")
-    return str(resultado)
+        confianca = resultado.get("confianca", resultado.get("similaridade"))
+        fallback = resultado.get("fallback")
+        if fallback is None:
+            fallback = confianca is not None and confianca < THRESHOLD
+        return {
+            "resposta": resultado.get("resposta", ""),
+            "confianca": confianca,
+            "categoria": resultado.get("categoria", resultado.get("intencao")),
+            "fallback": bool(fallback),
+        }
+    return {"resposta": str(resultado), "confianca": None, "categoria": None, "fallback": False}
+
+
+def mostrar_resposta(dados):
+    """Mostra a resposta do chatbot, o fallback e a confiança."""
+    if dados["fallback"]:
+        st.warning(dados["resposta"] or MENSAGEM_FALLBACK)
+        st.caption("🔁 Encaminhado para suporte humano")
+    else:
+        st.markdown(dados["resposta"])
+        if dados["categoria"]:
+            st.caption(f"Categoria: {dados['categoria']}")
+
+    if dados["confianca"] is not None:
+        st.caption(f"Nível de confiança: {dados['confianca']:.0%}")
+        st.progress(min(max(float(dados["confianca"]), 0.0), 1.0))
 
 
 st.title("🤖 Chatbot de Suporte Técnico Hikvision")
@@ -43,13 +77,15 @@ if st.sidebar.button("Limpar conversa"):
 
 st.divider()
 
-# Histórico guardado na sessão do Streamlit
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
 for mensagem in st.session_state.historico:
     with st.chat_message(mensagem["papel"]):
-        st.markdown(mensagem["texto"])
+        if mensagem["papel"] == "assistant":
+            mostrar_resposta(mensagem["dados"])
+        else:
+            st.markdown(mensagem["texto"])
 
 pergunta = st.chat_input("Digite sua pergunta. Ex.: Como redefinir a senha do meu DVR?")
 
@@ -59,10 +95,10 @@ if pergunta is not None:
         with st.chat_message("user"):
             st.markdown(pergunta)
 
-        resposta = extrair_resposta(processar_pergunta(pergunta))
+        dados = normalizar_resultado(processar_pergunta(pergunta))
 
-        st.session_state.historico.append({"papel": "assistant", "texto": resposta})
+        st.session_state.historico.append({"papel": "assistant", "dados": dados})
         with st.chat_message("assistant"):
-            st.markdown(resposta)
+            mostrar_resposta(dados)
     else:
         st.warning("Digite uma pergunta antes de enviar.")
