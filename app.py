@@ -1,7 +1,7 @@
 """
 Interface Streamlit do Chatbot de Suporte Técnico Hikvision.
 
-Commit 2 - Integração da interface com o engine (processar_pergunta).
+Commit 3 - Histórico de conversa durante a sessão.
 """
 
 import streamlit as st
@@ -38,16 +38,31 @@ st.markdown(
     """
 )
 
+if st.sidebar.button("Limpar conversa"):
+    st.session_state.historico = []
+
 st.divider()
 
-pergunta = st.text_input(
-    "Digite sua pergunta:",
-    placeholder="Ex.: Como redefinir a senha do meu DVR?",
-)
+# Histórico guardado na sessão do Streamlit
+if "historico" not in st.session_state:
+    st.session_state.historico = []
 
-if st.button("Enviar"):
+for mensagem in st.session_state.historico:
+    with st.chat_message(mensagem["papel"]):
+        st.markdown(mensagem["texto"])
+
+pergunta = st.chat_input("Digite sua pergunta. Ex.: Como redefinir a senha do meu DVR?")
+
+if pergunta is not None:
     if pergunta.strip():
-        resultado = processar_pergunta(pergunta)
-        st.success(extrair_resposta(resultado))
+        st.session_state.historico.append({"papel": "user", "texto": pergunta})
+        with st.chat_message("user"):
+            st.markdown(pergunta)
+
+        resposta = extrair_resposta(processar_pergunta(pergunta))
+
+        st.session_state.historico.append({"papel": "assistant", "texto": resposta})
+        with st.chat_message("assistant"):
+            st.markdown(resposta)
     else:
         st.warning("Digite uma pergunta antes de enviar.")
