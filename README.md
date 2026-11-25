@@ -1,4 +1,4 @@
-# Chatbot de Suporte Técnico — Hikvision
+# Chatbot de Dúvidas Técnicas para Equipamentos de Segurança Eletrônica Hikvision
 
 ## 1. Sobre o projeto
 

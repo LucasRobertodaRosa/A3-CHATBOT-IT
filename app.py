@@ -11,7 +11,7 @@ from pathlib import Path
 import streamlit as st
 
 st.set_page_config(
-    page_title="Chatbot Suporte Técnico Hikvision",
+    page_title="Chatbot Duvidas Técnicas gerais para equipamentos Hikvision",
     page_icon="🤖",
     layout="centered",
 )
@@ -109,7 +109,7 @@ def mostrar_resposta(dados):
 # ---------------------------------------------------------------------------
 # Interface
 # ---------------------------------------------------------------------------
-st.title("🤖 Chatbot de Suporte Técnico Hikvision")
+st.title("🤖 Chatbot de Dúvidas Técnicas Hikvision")
 
 st.markdown(
     """
