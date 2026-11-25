@@ -27,7 +27,8 @@ SAIDA.parent.mkdir(parents=True, exist_ok=True)
 with ENTRADA.open(
     "r", encoding="utf-8-sig", newline=""
 ) as arquivo:
-    leitor = csv.DictReader(arquivo)
+    linhas = (linha for linha in arquivo if linha.strip())
+    leitor = csv.DictReader(linhas)
     casos = list(leitor)
     colunas_originais = list(leitor.fieldnames or [])
 
