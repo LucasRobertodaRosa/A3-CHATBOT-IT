@@ -11,7 +11,7 @@ from pathlib import Path
 import streamlit as st
 
 st.set_page_config(
-    page_title="Chatbot Suporte Técnico Hikvision",
+    page_title="Chatbot Duvidas Técnicas gerais para equipamentos Hikvision",
     page_icon="🤖",
     layout="centered",
 )
@@ -91,7 +91,10 @@ def mostrar_resposta(dados):
     """Mostra a resposta do chatbot, o fallback e a confiança."""
     if dados["fallback"]:
         st.warning(dados["resposta"] or MENSAGEM_FALLBACK)
-        st.caption("🔁 Encaminhado para suporte humano")
+        st.caption(
+    "⚠️ Resposta não identificada. "
+    "Consulte a documentação oficial ou um profissional qualificado."
+)
     else:
         st.markdown(dados["resposta"] or MENSAGEM_FALLBACK)
         if dados["categoria"]:
@@ -109,20 +112,29 @@ def mostrar_resposta(dados):
 # ---------------------------------------------------------------------------
 # Interface
 # ---------------------------------------------------------------------------
-st.title("🤖 Chatbot de Suporte Técnico Hikvision")
+st.title("🤖 Chatbot de Dúvidas Técnicas Hikvision")
 
 st.markdown(
-    """
-    Olá! Sou o assistente virtual de suporte técnico para equipamentos **Hikvision**.
+       """
+    Olá! Sou um assistente virtual desenvolvido para fins
+    acadêmicos, destinado a esclarecer dúvidas técnicas sobre
+    equipamentos de segurança eletrônica.
 
-    Posso ajudar com dúvidas sobre:
-    - **Configuração / Instalação**
-    - **Erros / Falhas**
-    - **Segurança / Senhas**
+    Posso auxiliar com dúvidas sobre:
 
-    Quando não tiver confiança suficiente na resposta, vou encaminhar você
-    para o suporte humano em vez de inventar uma solução.
+    - **Configuração e instalação**
+    - **Identificação de erros e falhas**
+    - **Segurança, senhas e acesso**
+
+    As respostas são obtidas de uma base de conhecimento
+    limitada e podem não contemplar todos os equipamentos
+    ou situações.
     """
+)
+
+st.caption(
+    "⚠️ Protótipo acadêmico independente, não oficial "
+    "e não homologado por fabricantes."
 )
 
 if st.sidebar.button("Limpar conversa"):

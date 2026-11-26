@@ -1,12 +1,24 @@
-# Chatbot de Suporte Técnico — Hikvision
+# Chatbot de Dúvidas Técnicas para Equipamentos de Segurança Eletrônica Hikvision
 
 ## 1. Sobre o projeto
 
-Este projeto consiste no desenvolvimento de um chatbot de suporte técnico especializado em equipamentos Hikvision.
+Este projeto consiste no desenvolvimento de um chatbot acadêmico destinado a esclarecer dúvidas técnicas relacionadas a equipamentos de segurança eletrônica.
 
-O objetivo é fornecer respostas a dúvidas técnicas frequentes, auxiliando os usuários na identificação de problemas e na consulta de orientações relacionadas aos equipamentos.
+O sistema utiliza técnicas de Processamento de Linguagem Natural (PLN), especificamente TF-IDF e similaridade de cosseno, para interpretar perguntas e recuperar respostas a partir de uma base de conhecimento própria e limitada.
 
-O chatbot utiliza técnicas de Processamento de Linguagem Natural (PLN) para interpretar perguntas e recuperar respostas a partir de uma base de conhecimento própria.
+A base inicial utiliza exemplos e informações técnicas de equipamentos de videomonitoramento de um fabricante específico, exclusivamente como referência de estudo. Isso não implica vínculo comercial, autorização ou representação oficial.
+
+### Aviso importante — Projeto acadêmico não oficial
+
+**Este chatbot foi desenvolvido exclusivamente para fins acadêmicos, como atividade da disciplina de Inteligência Artificial.**
+
+O sistema é independente e não possui vínculo, autorização, homologação, certificação ou representação oficial de fabricantes de equipamentos de segurança eletrônica.
+
+O protótipo não foi validado para assegurar conformidade integral com padrões, procedimentos técnicos, recomendações ou atualizações oficiais dos fabricantes.
+
+As respostas são produzidas com base em um conjunto limitado de informações e podem conter imprecisões ou não se aplicar a todos os modelos, versões de firmware e cenários de utilização.
+
+**Este chatbot não substitui os manuais oficiais, as orientações dos fabricantes ou a avaliação de um profissional técnico qualificado.**
 
 ## 2. Objetivos
 
@@ -199,7 +211,22 @@ A partir da pasta raiz do projeto, execute:
 O programa envia cada pergunta ao chatbot e compara a intenção
 ou o comportamento de fallback com o resultado esperado.
 
+
+### Exportação dos resultados detalhados
+
+Para gerar a tabela com as respostas obtidas,
+execute:
+
+```powershell
+python exportar_resultados.py
+```
+
+Os resultados são salvos em:
+
+`docs/evidencias/resultados_20_testes.csv`
+
 ### Métricas calculadas
+
 
 - **Acurácia:** percentual de testes classificados corretamente.
 - **Acertos:** quantidade de resultados iguais aos esperados.
