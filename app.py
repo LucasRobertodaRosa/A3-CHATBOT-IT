@@ -103,7 +103,10 @@ def mostrar_resposta(dados):
     if dados["confianca"] is not None:
         try:
             confianca = min(max(float(dados["confianca"]), 0.0), 1.0)
-            st.caption(f"Nível de confiança: {confianca:.0%}")
+            st.caption(f"Nível de confiança: {confianca:.0%}"
+                           "Dica: descreva o equipamento e o problema em cada "
+    "pergunta. O chatbot ainda não interpreta o contexto "
+    "de mensagens anteriores.")
             st.progress(confianca)
         except (TypeError, ValueError):
             pass
