@@ -61,7 +61,7 @@ Perguntas fora do escopo devem receber uma resposta de fallback, informando que 
 
 O projeto utiliza uma abordagem de recuperação de informações baseada em TF-IDF e similaridade do cosseno.
 
-O funcionamento previsto é:
+O funcionamento implementado é:
 
 1. O usuário envia uma pergunta.
 2. O sistema realiza o pré-processamento do texto.
