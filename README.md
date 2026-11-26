@@ -211,15 +211,22 @@ A partir da pasta raiz do projeto, execute:
 O programa envia cada pergunta ao chatbot e compara a intenção
 ou o comportamento de fallback com o resultado esperado.
 
+
 ### Exportação dos resultados detalhados
 
-Para gerar a tabela com as respostas efetivamente
-produzidas pelo chatbot, execute:
+Para gerar a tabela com as respostas obtidas,
+execute:
 
 ```powershell
 python exportar_resultados.py
+```
+
+Os resultados são salvos em:
+
+`docs/evidencias/resultados_20_testes.csv`
 
 ### Métricas calculadas
+
 
 - **Acurácia:** percentual de testes classificados corretamente.
 - **Acertos:** quantidade de resultados iguais aos esperados.
